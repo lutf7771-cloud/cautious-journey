@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تهنئة فريق لطف</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .input-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
+        input { width: 85%; padding: 12px; margin: 20px 0; border: 2px solid #013441; border-radius: 8px; font-size: 16px; text-align: center; }
+        button { background-color: #013441; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        
+        #capture-area { position: relative; width: 100%; max-width: 500px; display: none; margin: 0 auto; }
+        .bg-img { width: 100%; display: block; border-radius: 10px; }
+        
+        /* إجبار اللون الأسود والخط الصغير بقوة البرمجة */
+        #user-name-overlay {
+            position: absolute !important;
+            top: 70.2% !important; 
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 45% !important;
+            text-align: center !important;
+            font-size: 15px !important; /* حجم صغير جداً وناعم */
+            font-weight: bold !important;
+            color: #000000 !important; /* أسود فاحم صريح */
+            white-space: nowrap !important;
+            z-index: 999 !important;
+        }
+        .controls { display: none; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="setup" class="input-box">
+        <h2 style="color:#013441;">معايدة عيد الأضحى 🌙</h2>
+        <input type="text" id="nameInput" placeholder="اكتب الاسم هنا...">
+        <br><br>
+        <button onclick="generate()">عرض البطاقة</button>
+    </div>
+
+    <div id="capture-area">
+        <img src="bg.png" class="bg-img">
+        <div id="user-name-overlay"></div>
+    </div>
+
+    <div id="controls-area" class="controls">
+        <button onclick="downloadCard()" style="background-color: #28a745;">تحميل البطاقة</button>
+        <button onclick="location.reload()" style="background-color: #6c757d;">اسم آخر</button>
+    </div>
+
+    <script>
+        function generate() {
+            const name = document.getElementById('nameInput').value;
+            if(name.trim() !== "") {
+                document.getElementById('setup').style.display = 'none';
+                document.getElementById('capture-area').style.display = 'block';
+                document.getElementById('controls-area').style.display = 'block';
+                document.getElementById('user-name-overlay').innerText = name;
+            }
+        }
+
+        function downloadCard() {
+            const card = document.getElementById('capture-area');
+            html2canvas(card, { 
+                useCORS: true, 
+                scale: 3,
+                onclone: (clonedDoc) => {
+                    const clonedName = clonedDoc.getElementById('user-name-overlay');
+                    clonedName.style.setProperty('font-size', '15px', 'important');
+                    clonedName.style.setProperty('color', '#000000', 'important');
+                }
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'lutf-eid-card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
